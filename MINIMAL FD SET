@@ -1,48 +1,49 @@
-# 📂 Minimal Functional Dependency Set
+Minimal FD Set
 
-## Region & Location
-- **RegionID →** Region_name, R_Treecount_ID, Area, Location_ID, Report_ID  
-- **Location_ID →** City, State  
-- **R_Treecount_ID →** Region_ID, Tree_count, Date  
+RegionID → Region_name, R_Treecount_ID, Area, Location_ID, Report_ID 
 
-## Harvest & Reports
-- **Harvest_ID →** Batch_ID, Harvest_date, Volume, Harvested_Tree_count, Replanted_Tree_count  
-- **Report_ID →** Harvest_ID, Report_date, Tree_density, Sustainability_score, Carbon_absorption  
+Location_ID → City, State  
 
-## Logger
-- **Logger_ID →** First_name, Middle_name, Last_name  
+R_Treecount_ID → Region_ID, Tree_count, Date  
 
-## Batch & Facility
-- **Batch_ID →** Facility_ID, Total_quantity, Total_volume  
-- **Facility_ID →** Address_ID, Facility_name, Owner_name  
-- **(Batch_ID, Facility_ID, Processing_stage_ID) →** Status, Processing_start_date, Processing_end_date  
-- **Processing_stage_ID →** Processing_stage_name  
-- **(Batch_ID, Facility_ID) →** Total_quantity, Available_quantity  
+Harvest_ID → Batch_ID, Harvest_date, Volume, Harvested_Tree_count, Replanted_Tree_count  
 
-## Transactions
-- **Transaction_ID →** Batch_ID, Facility_ID, Manufacturer_ID, Quantity_purchased, Purchase_date  
-- **Manufacturer_ID →** Address_ID, Sales_ID, Name, Wood_purchased  
+Report_ID → Harvest_ID, Report_date, Tree_density, Sustainability_score, Carbon_absorption  
 
-## Products
-- **Product_ID →** Manufacturer_ID, User_ID, Product_Type, Wood_used_quantity, Volume, Production_date, Usage_Status  
-- **(Product_ID, Manufacturer_ID) →** Total_quantity, Available_quantity  
-- **Product_ID →** Condition, Decision  
+Logger_ID → First_name, Middle_name, Last_name
 
-## Users & Sales
-- **User_ID →** Customer_name  
-- **Sales_ID →** User_ID, Product_ID, Purchase_date, Quantity_purchased  
+Batch_ID → Facility_ID, Total_quantity, Total_volume  
 
-## Disposal & Recycling
-- **Disposal_ID →** Product_ID, Disposal_method_ID, Disposal_method_date  
-- **Recycle_method_ID →** Recycle_method_name  
-- **Recycle_ID →** Product_ID, Recycle_method_ID, Recycle_date  
+Facility_ID → Address_ID, Facility_name, Owner_name  
 
-## Addresses
-- **Address_ID →** Street, City, State, Postal_code  
+(Batch_ID, Facility_ID, Processing_stage_ID) → Status, Processing_start_date, Processing_end_date  
 
-## Tree Count
-- **R_treecount_ID →** Tree_count, Date  
+Processing_stage_ID → Processing_stage_name
 
-## Manufacturer Ownership
-- **(Manufacturer_ID, Batch_ID) →** Quantity_owned  
+(Batch_ID, Facility_ID) → Total_quantity, Available_quantity  
 
+Transaction_ID → Batch_ID, Facility_ID, Manufacturer_ID, Quantity_purchased, Purchase_date  
+
+Manufacturer_ID → Address_ID, Sales_ID, Name, Wood_purchased  
+
+Product_ID → Manufacturer_ID, User_ID, Product_Type, Wood_used_quantity, Volume, Production_date, Usage_Status  
+
+(Product_ID, Manufacturer_ID) → Total_quantity, Available_quantity  
+
+User_ID → Customer_name
+
+Sales_ID → User_ID, Product_ID, Purchase_date, Quantity_purchased  
+
+Product_ID → Condition, Decision  
+
+Disposal_ID → Product_ID, Disposal_method_ID, Disposal_method_date  
+
+Recycle_method_ID → Recycle_method_name  
+
+Recycle_ID → Product_ID, Recycle_method_ID, Recycle_date  
+
+Address_ID → Street, City, State, Postal_code 
+
+R_treecount_ID → Tree_count, Date 
+
+(Manufacturer_ID, Batch_ID) → Quantity_owned  
