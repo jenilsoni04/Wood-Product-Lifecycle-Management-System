@@ -1,1 +1,290 @@
+Perfect 💯 I’ll clean up and **format all your queries nicely** so they’re easy to read and organized.
+I’ll group them as **Basic Updates/Deletes**, **Intermediate Joins**, and **Complex Queries**.
+
+---
+
+# ✅ Formatted SQL Queries
+
+## 1. Basic Updates and Deletes
+
+```sql
+-- 1. Update an existing batch
+UPDATE Batch
+SET Facility_ID = 2,
+    Total_quantity = 1200,
+    Total_volume = 800
+WHERE Batch_ID = 41;
+
+-- 2. Update an existing manufacturer
+UPDATE Manufacturer
+SET Address_ID = 5,
+    Sales_ID = 10,
+    Name = 'WoodTech Industries',
+    Wood_purchased = 10000
+WHERE Manufacturer_ID = 81;
+
+-- 3. Update the total quantity in Product_Inventory
+UPDATE Product_Inventory
+SET Total_quantity = 1200
+WHERE Product_ID = 3
+  AND Manufacturer_ID = 2;
+
+-- 4. Delete a customer
+DELETE FROM Customer
+WHERE Customer_ID = 10;
+
+-- 5. Update available quantity in Product_Inventory
+UPDATE Product_Inventory
+SET Available_quantity = 950
+WHERE Product_ID = 4
+  AND Manufacturer_ID = 3;
+
+-- 6. Delete a batch
+DELETE FROM Batch
+WHERE Batch_ID = 5;
+
+-- 7. Update a product in Wood_Product
+UPDATE Wood_Product
+SET Manufacturer_ID = 5,
+    Customer_ID = 15,
+    Product_Type = 'Wooden Table',
+    Wood_used_quantity = 50,
+    Volume = 120,
+    Production_date = '2024-11-09',
+    Usage_Status = 'Available'
+WHERE Product_ID = 10;
+
+-- 8. Change disposal method
+UPDATE Waste_Disposal
+SET Disposal_Method_ID = 2
+WHERE Disposal_ID = 3;
+
+-- 9. Update a harvest record
+UPDATE Harvest
+SET Batch_ID = 6,
+    Harvest_date = '2024-11-01',
+    Volume = 800,
+    Harvested_Tree_count = 1000,
+    Replanted_Tree_count = 200
+WHERE Harvest_ID = 21;
+
+-- 10. Delete a product
+DELETE FROM Wood_Product
+WHERE Product_ID = 12;
+```
+
+---
+
+## 2. Intermediate Queries (Joins)
+
+```sql
+-- 11. Select all products with their manufacturer
+SELECT wp.Product_ID, wp.Product_Type, m.Name AS Manufacturer
+FROM Wood_Product wp
+JOIN Manufacturer m ON wp.Manufacturer_ID = m.Manufacturer_ID;
+
+-- 12. Get products sold by a specific customer
+SELECT wp.Product_Type, wp.Production_date
+FROM Wood_Product wp
+JOIN Sales s ON wp.Customer_ID = s.Customer_ID
+WHERE s.Customer_ID = 11;
+
+-- 13. Update customer contact number
+UPDATE Customer_Contact
+SET Contact_number = '9876543210'
+WHERE Customer_ID = 10;
+
+-- 14. Get all batches with their manufacturer
+SELECT b.Batch_ID, b.Total_quantity, m.Name AS Manufacturer
+FROM Batch b
+JOIN Manufacturer m ON b.Facility_ID = m.Address_ID;
+
+-- 15. Update facility address
+UPDATE Facility
+SET Address_ID = 7
+WHERE Facility_ID = 5;
+
+-- 16. Harvests with carbon absorption below average
+SELECT h.Harvest_ID, hr.Carbon_absorption
+FROM Harvest h
+JOIN Harvest_Report hr ON h.Harvest_ID = hr.Harvest_ID
+WHERE hr.Carbon_absorption < (
+    SELECT AVG(Carbon_absorption) FROM Harvest_Report
+);
+
+-- 17. Total wood used per product type
+SELECT wp.Product_Type, SUM(wp.Wood_used_quantity) AS Total_Wood_Used
+FROM Wood_Product wp
+GROUP BY wp.Product_Type;
+
+-- 18. Customers who purchased from a specific manufacturer
+SELECT DISTINCT c.Customer_name
+FROM Customer c
+JOIN Sales s ON c.Customer_ID = s.Customer_ID
+JOIN Wood_Product wp ON s.Customer_ID = wp.Customer_ID
+WHERE wp.Manufacturer_ID = 8;
+
+-- 19. Average wood used per product type
+SELECT wp.Product_Type, AVG(wp.Wood_used_quantity) AS Avg_Wood_Used
+FROM Wood_Product wp
+GROUP BY wp.Product_Type;
+
+-- 20. Total wood used by each manufacturer
+SELECT m.Name AS Manufacturer, SUM(wp.Wood_used_quantity) AS Total_Wood_Used
+FROM Manufacturer m
+JOIN Wood_Product wp ON m.Manufacturer_ID = wp.Manufacturer_ID
+GROUP BY m.Name;
+```
+
+---
+
+## 3. Complex Queries (Subqueries & Multi-Joins)
+
+```sql
+-- 21. Manufacturer with the highest total wood purchased
+SELECT Name
+FROM Manufacturer
+WHERE Manufacturer_ID = (
+    SELECT Manufacturer_ID
+    FROM Manufacturer
+    ORDER BY Wood_purchased DESC
+    LIMIT 1
+);
+
+-- 22. Manufacturers with products sold to a specific customer
+SELECT DISTINCT m.Name AS Manufacturer
+FROM Manufacturer m
+JOIN Wood_Product wp ON m.Manufacturer_ID = wp.Manufacturer_ID
+JOIN Sales s ON wp.Product_ID = s.Product_ID
+WHERE s.Customer_ID = 10;
+
+-- 23. Average processing volume per facility
+SELECT f.Facility_name, AVG(p.Quantity) AS Avg_Processing_Volume
+FROM Facility f
+JOIN Wood_Processing p ON f.Facility_ID = p.Facility_ID
+GROUP BY f.Facility_name;
+
+-- 24. Total sales per product with customer details
+SELECT wp.Product_Type, c.Customer_name, SUM(s.Quantity_purchased) AS Total_Sales
+FROM Sales s
+JOIN Wood_Product wp ON s.Product_ID = wp.Product_ID
+JOIN Customer c ON s.Customer_ID = c.Customer_ID
+GROUP BY wp.Product_Type, c.Customer_name;
+
+-- 25. Product with the most wood used
+SELECT Product_Type, MAX(Wood_used_quantity) AS Max_Wood_Used
+FROM Wood_Product
+GROUP BY Product_Type;
+
+-- 26. Total recycled wood by method
+SELECT rm.Recycle_Method_Name, SUM(wp.Wood_used_quantity) AS Total_Recycled
+FROM Recycle r
+JOIN Wood_Product wp ON r.Product_ID = wp.Product_ID
+JOIN Recycle_Method rm ON r.Recycle_Method_ID = rm.Recycle_Method_ID
+GROUP BY rm.Recycle_Method_Name;
+
+-- 27. Harvests with sustainability score > 80
+SELECT h.Harvest_ID, h.Harvest_date, hr.Sustainability_score
+FROM Harvest h
+JOIN Harvest_Report hr ON h.Harvest_ID = hr.Harvest_ID
+WHERE hr.Sustainability_score > 80;
+
+-- 28. Total waste disposed by method
+SELECT dm.Disposal_Method_Name, SUM(wp.Volume) AS Total_Waste_Disposed
+FROM Waste_Disposal wd
+JOIN Wood_Product wp ON wd.Product_ID = wp.Product_ID
+JOIN Disposal_Method dm ON wd.Disposal_Method_ID = dm.Disposal_Method_ID
+GROUP BY dm.Disposal_Method_Name;
+
+-- 29. Products with highest recycled volume
+SELECT wp.Product_Type, MAX(wp.Volume) AS Max_Volume
+FROM Recycle r
+JOIN Wood_Product wp ON r.Product_ID = wp.Product_ID
+GROUP BY wp.Product_Type;
+
+-- 30. Number of disposals per product type
+SELECT wp.Product_Type, COUNT(wd.Disposal_ID) AS Total_Disposals
+FROM Waste_Disposal wd
+JOIN Wood_Product wp ON wd.Product_ID = wp.Product_ID
+GROUP BY wp.Product_Type;
+
+-- 31. Products with no recycling
+SELECT wp.Product_Type
+FROM Wood_Product wp
+LEFT JOIN Recycle r ON wp.Product_ID = r.Product_ID
+WHERE r.Product_ID IS NULL;
+
+-- 32. Product types with more than 5 disposals
+SELECT wp.Product_Type, COUNT(wd.Disposal_ID) AS Disposal_Count
+FROM Waste_Disposal wd
+JOIN Wood_Product wp ON wd.Product_ID = wp.Product_ID
+GROUP BY wp.Product_Type
+HAVING COUNT(wd.Disposal_ID) > 5;
+
+-- 33. Disposal method used for the most products
+SELECT dm.Disposal_Method_Name, COUNT(DISTINCT wd.Product_ID) AS Product_Count
+FROM Waste_Disposal wd
+JOIN Disposal_Method dm ON wd.Disposal_Method_ID = dm.Disposal_Method_ID
+GROUP BY dm.Disposal_Method_Name
+ORDER BY Product_Count DESC
+LIMIT 1;
+
+-- 34. Product list with total volume and status
+SELECT wp.Product_Type, SUM(wp.Volume) AS Total_Volume, wp.Usage_Status
+FROM Wood_Product wp
+GROUP BY wp.Product_Type, wp.Usage_Status;
+
+-- 35. Products disposed in both 2024 and 2025
+SELECT wp.Product_Name, COUNT(wd.Disposal_ID) AS Disposal_Count
+FROM Waste_Disposal wd
+JOIN Wood_Product wp ON wd.Product_ID = wp.Product_ID
+WHERE wd.Disposal_Date BETWEEN '2024-01-01' AND '2024-12-31'
+  AND wp.Product_ID IN (
+      SELECT wp.Product_ID
+      FROM Waste_Disposal wd
+      JOIN Wood_Product wp ON wd.Product_ID = wp.Product_ID
+      WHERE wd.Disposal_Date BETWEEN '2025-01-01' AND '2025-12-31'
+  )
+GROUP BY wp.Product_Name;
+
+-- 36. Products that are both recycled and disposed
+SELECT DISTINCT wp.Product_Type
+FROM Wood_Product wp
+JOIN Recycle r ON wp.Product_ID = r.Product_ID
+JOIN Waste_Disposal wd ON wp.Product_ID = wd.Product_ID;
+
+-- 37. Total volume recycled per manufacturer (specific method)
+SELECT m.Name AS Manufacturer, SUM(wp.Volume) AS Total_Volume_Recycled
+FROM Recycle r
+JOIN Wood_Product wp ON r.Product_ID = wp.Product_ID
+JOIN Recycle_Method rm ON r.Recycle_Method_ID = rm.Recycle_Method_ID
+JOIN Manufacturer m ON wp.Manufacturer_ID = m.Manufacturer_ID
+WHERE rm.Recycle_Method_Name = 'Method A'
+GROUP BY m.Name;
+
+-- 38. Total volume disposed by each method
+SELECT dm.Disposal_Method_Name, SUM(wp.Volume) AS Total_Volume_Disposed
+FROM Waste_Disposal wd
+JOIN Wood_Product wp ON wd.Product_ID = wp.Product_ID
+JOIN Disposal_Method dm ON wd.Disposal_Method_ID = dm.Disposal_Method_ID
+GROUP BY dm.Disposal_Method_Name;
+
+-- 39. Top 5 harvests with highest tree density
+SELECT h.Harvest_ID, MAX(hr.Tree_density) AS Max_Tree_Density
+FROM Harvest_Report hr
+JOIN Harvest h ON hr.Harvest_ID = h.Harvest_ID
+GROUP BY h.Harvest_ID
+ORDER BY Max_Tree_Density DESC
+LIMIT 5;
+
+-- 40. Top 3 products (by volume) per manufacturer (last 2 years)
+SELECT m.Name AS Manufacturer_Name,
+       wp.Product_Type,
+       SUM(wp.Volume) AS Total_Volume
+FROM Manufacturer m
+JOIN Wood_Product wp ON m.Manufacturer_ID = wp.Manufacturer_ID
+WHERE wp.Production_date >= DATE_TRUNC('year', CURRENT_DATE) - INTERVAL '2 years'
+GROUP BY m.Name, wp.Product_Type
+ORDER BY m.Name, Total_Volume DESC
+LIMIT 3;
 
