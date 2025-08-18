@@ -1,0 +1,154 @@
+Region
+Primary Key: RegionID
+All attributes depend only on RegionID, no partial or transitive dependencies.
+✔ In BCNF.
+
+Region_Location
+Primary Key: Location_ID
+City and State depend only on Location_ID.
+✔ In BCNF.
+
+Tree_Count
+Primary Key: R_tree_count_ID
+Tree_count and Date depend fully on R_tree_count_ID, no other determinant exists.
+✔ In BCNF.
+
+Region_Harvest
+Composite Primary Key: (Region_ID, Harvest_ID)
+Both attributes together uniquely identify a record, no extra dependency.
+✔ In BCNF.
+
+Harvest
+Primary Key: Harvest_ID
+Attributes like Batch_ID, Harvest_date, Volume, etc. depend only on Harvest_ID.
+✔ In BCNF.
+
+Harvest_Report
+Primary Key: Report_ID
+All attributes (Harvest_ID, Report_date, etc.) depend only on Report_ID.
+✔ In BCNF.
+
+Logger
+Primary Key: Logger_ID
+Name attributes depend only on Logger_ID.
+✔ In BCNF.
+
+Logger_Contact
+Primary Key (and FK): Logger_ID
+Contact_number depends only on Logger_ID.
+✔ In BCNF.
+
+Harvest_Logger
+Composite Primary Key: (Harvest_ID, Logger_ID)
+Pure relationship table, no partial/transitive dependency.
+✔ In BCNF.
+
+Batch
+Primary Key: Batch_ID
+All attributes (Facility_ID, Total_quantity, Total_volume) depend on Batch_ID.
+✔ In BCNF.
+
+Facility
+Primary Key: Facility_ID
+Address_ID, Facility_name, and Owner_name depend only on Facility_ID.
+✔ In BCNF.
+
+Wood_Processing
+Composite Primary Key: (Batch_ID, Facility_ID)
+Processing_stage_ID, Status, etc. depend only on the composite key.
+✔ In BCNF.
+
+Processing_Stage
+Primary Key: Processing_stage_ID
+Processing_stage_name depends only on the key.
+✔ In BCNF.
+
+Inventory
+Composite Primary Key: (Batch_ID, Facility_ID)
+Total_quantity, Available_quantity depend on the composite key.
+✔ In BCNF.
+
+Transaction
+Primary Key: Transaction_ID
+All attributes (Batch_ID, Facility_ID, Manufacturer_ID, etc.) depend only on Transaction_ID.
+✔ In BCNF.
+
+Manufacturer_Batch
+Composite Primary Key: (Manufacturer_ID, Batch_ID)
+Quantity_owned depends on both keys.
+✔ In BCNF.
+
+Manufacturer
+Primary Key: Manufacturer_ID
+All attributes depend only on Manufacturer_ID.
+✔ In BCNF.
+
+Wood_Product
+Primary Key: Product_ID
+Attributes like Manufacturer_ID, Product_Type, Volume, etc. depend only on Product_ID.
+✔ In BCNF.
+
+Product_Inventory
+Composite Primary Key: (Product_ID, Manufacturer_ID)
+Total_quantity, Available_quantity depend only on the composite key.
+✔ In BCNF.
+
+User
+Primary Key: User_ID
+Customer_name depends only on User_ID.
+✔ In BCNF.
+
+User_Contact
+Primary Key (and FK): User_ID
+Contact_number depends only on User_ID.
+✔ In BCNF.
+
+Sales
+Primary Key: Sales_ID
+Attributes (User_ID, Product_ID, Purchase_date, etc.) depend only on Sales_ID.
+✔ In BCNF.
+
+Wood_Inspection
+Primary Key: Product_ID
+Condition, Decision depend only on Product_ID.
+✔ In BCNF.
+
+Waste_Disposal
+Primary Key: Disposal_ID
+Attributes depend only on Disposal_ID.
+✔ In BCNF.
+
+Disposal_Method
+Primary Key: Disposal_Method_ID
+Disposal_Method_Name depends only on the key.
+✔ In BCNF.
+
+Recycle_Method
+Primary Key: Recycle_Method_ID
+Recycle_method_name depends only on the key.
+✔ In BCNF.
+
+Recycle
+Primary Key: Recycle_ID
+Attributes (Product_ID, Recycle_method_ID, Recycle_date) depend only on Recycle_ID.
+✔ In BCNF.
+
+Facility_Address
+Primary Key: Facility_Address_ID
+Address details depend only on the key.
+✔ In BCNF.
+
+Manufacturer_Phone
+Primary Key (and FK): Manufacturer_ID
+Contact_number depends only on Manufacturer_ID.
+✔ In BCNF.
+
+Manufacturer_Address
+Primary Key: Manufacturer_Address
+Address details depend only on the key.
+✔ In BCNF.
+
+Region_Harvest_Report
+Composite Primary Key: (Region_ID, Report_ID)
+Pure relationship table, no dependency issue.
+✔ In BCNF.
