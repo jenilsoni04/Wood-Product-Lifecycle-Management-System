@@ -26,3 +26,14 @@ The database tracks:
 ---
 
 ## 📂 Project Structure
+Wood-Product-Lifecycle-Management-System/
+│── 📄 README.md                 # Project overview & documentation  
+│── 📄 Project-Report.pdf         # Detailed project report  
+│── 📄 ER DIAGRAM.jpg             # Entity-Relationship diagram of the database  
+│── 📄 DDL SCRIPT                 # SQL script for database schema creation  
+│── 📄 DATA INSERTION.sql         # SQL script for inserting sample data  
+│── 📄 QUERIES                    # SQL queries for project tasks/requirements  
+│── 📄 MINIMAL FD SET             # Minimal Functional Dependencies  
+│── 📄 BCNF Reasons               # Normalization explanation (BCNF compliance for all tables)  
+
+
