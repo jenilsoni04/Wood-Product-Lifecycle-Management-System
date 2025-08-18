@@ -1,13 +1,7 @@
-Perfect 💯 I’ll clean up and **format all your queries nicely** so they’re easy to read and organized.
-I’ll group them as **Basic Updates/Deletes**, **Intermediate Joins**, and **Complex Queries**.
+-- =========================================================
+-- 1. BASIC UPDATES AND DELETES
+-- =========================================================
 
----
-
-# ✅ Formatted SQL Queries
-
-## 1. Basic Updates and Deletes
-
-```sql
 -- 1. Update an existing batch
 UPDATE Batch
 SET Facility_ID = 2,
@@ -71,13 +65,12 @@ WHERE Harvest_ID = 21;
 -- 10. Delete a product
 DELETE FROM Wood_Product
 WHERE Product_ID = 12;
-```
 
----
 
-## 2. Intermediate Queries (Joins)
+-- =========================================================
+-- 2. INTERMEDIATE QUERIES (JOINS)
+-- =========================================================
 
-```sql
 -- 11. Select all products with their manufacturer
 SELECT wp.Product_ID, wp.Product_Type, m.Name AS Manufacturer
 FROM Wood_Product wp
@@ -134,13 +127,12 @@ SELECT m.Name AS Manufacturer, SUM(wp.Wood_used_quantity) AS Total_Wood_Used
 FROM Manufacturer m
 JOIN Wood_Product wp ON m.Manufacturer_ID = wp.Manufacturer_ID
 GROUP BY m.Name;
-```
 
----
 
-## 3. Complex Queries (Subqueries & Multi-Joins)
+-- =========================================================
+-- 3. COMPLEX QUERIES (SUBQUERIES & MULTI-JOINS)
+-- =========================================================
 
-```sql
 -- 21. Manufacturer with the highest total wood purchased
 SELECT Name
 FROM Manufacturer
@@ -287,4 +279,3 @@ WHERE wp.Production_date >= DATE_TRUNC('year', CURRENT_DATE) - INTERVAL '2 years
 GROUP BY m.Name, wp.Product_Type
 ORDER BY m.Name, Total_Volume DESC
 LIMIT 3;
-
