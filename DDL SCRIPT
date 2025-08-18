@@ -1,1 +1,334 @@
+1. Region Table
+
+CREATE TABLE Region (
+    RegionID INT PRIMARY KEY,
+    Region_name VARCHAR(255) NOT NULL,
+    R_Treecount_ID INT,
+    Area DECIMAL(10, 2),
+    Location_ID INT,
+    Report_ID INT,
+    FOREIGN KEY (Location_ID) REFERENCES Region_Location(Location_ID),
+    FOREIGN KEY (Report_ID) REFERENCES Harvest_Report(Report_ID)
+);
+
+2. Region_Location Table
+
+CREATE TABLE Region_Location (
+    Location_ID INT PRIMARY KEY,
+    City VARCHAR(255),
+    State VARCHAR(255)
+);
+
+3. Tree_Count Table
+
+CREATE TABLE Tree_Count (
+    Region_ID INT PRIMARY KEY,
+    Tree_count INT,
+    Date DATE,
+    FOREIGN KEY (Region_ID) REFERENCES Region(RegionID)
+);
+
+
+
+
+4. Region_Harvest Table
+
+CREATE TABLE Region_Harvest (
+    Region_ID INT,
+    Harvest_ID INT,
+    PRIMARY KEY (Region_ID, Harvest_ID),
+    FOREIGN KEY (Region_ID) REFERENCES Region(RegionID),
+    FOREIGN KEY (Harvest_ID) REFERENCES Harvest(Harvest_ID)
+);
+
+5. Harvest Table
+
+CREATE TABLE Harvest (
+    Harvest_ID INT PRIMARY KEY,
+    Batch_ID INT,
+    Harvest_date DATE,
+    Volume DECIMAL(10, 2),
+    Harvested_Tree_count INT,
+    Replanted_Tree_count INT,
+    FOREIGN KEY (Batch_ID) REFERENCES Batch(Batch_ID)
+);
+
+6. Harvest_Report Table
+
+CREATE TABLE Harvest_Report (
+    Report_ID INT PRIMARY KEY,
+    Harvest_ID INT,
+    Report_date DATE,
+    Tree_density DECIMAL(10, 2),
+    Sustainability_score DECIMAL(10, 2),
+    Carbon_absorption DECIMAL(10, 2),
+    FOREIGN KEY (Harvest_ID) REFERENCES Harvest(Harvest_ID)
+);
+
+7. Region_Harvest_Report Table
+
+CREATE TABLE Region_Harvest_Report (
+    Region_ID INT,
+    Harvest_Report_ID INT,
+    PRIMARY KEY (Region_ID, Harvest_Report_ID),
+    FOREIGN KEY (Region_ID) REFERENCES Region(RegionID),
+    FOREIGN KEY (Harvest_Report_ID) REFERENCES Harvest_Report(Report_ID)
+);
+
+8. Logger Table
+
+CREATE TABLE Logger (
+    Logger_ID INT PRIMARY KEY,
+    First_name VARCHAR(255),
+    Middle_name VARCHAR(255),
+    Last_name VARCHAR(255)
+);
+
+9. Logger_Contact Table
+
+CREATE TABLE Logger_Contact (
+    Logger_ID INT,
+    Contact_number VARCHAR(15),
+    PRIMARY KEY (Logger_ID, Contact_number),
+    FOREIGN KEY (Logger_ID) REFERENCES Logger(Logger_ID)
+);
+
+10. Harvest_Logger Table
+
+CREATE TABLE Harvest_Logger (
+    Harvest_ID INT,
+    Logger_ID INT,
+    PRIMARY KEY (Harvest_ID, Logger_ID),
+    FOREIGN KEY (Harvest_ID) REFERENCES Harvest(Harvest_ID),
+    FOREIGN KEY (Logger_ID) REFERENCES Logger(Logger_ID)
+);
+
+11. Batch Table
+
+CREATE TABLE Batch (
+    Batch_ID INT PRIMARY KEY,
+    Facility_ID INT,
+    Total_quantity INT,
+    Total_volume DECIMAL(10, 2),
+    FOREIGN KEY (Facility_ID) REFERENCES Facility(Facility_ID)
+);
+
+12. Facility Table
+
+CREATE TABLE Facility (
+    Facility_ID INT PRIMARY KEY,
+    Address_ID INT,
+    Facility_name VARCHAR(255),
+    Owner_name VARCHAR(255),
+    FOREIGN KEY (Address_ID) REFERENCES Facility_Address(Facility_Address_ID)
+);
+
+13. Wood_Processing Table
+
+CREATE TABLE Wood_Processing (
+    Batch_ID INT,
+    Facility_ID INT,
+    Processing_Stage_ID INT,
+    Status VARCHAR(255),
+    Quantity INT,
+    Processing_Start_date DATE,
+    Processing_end_date DATE,
+    PRIMARY KEY (Batch_ID, Facility_ID),
+    FOREIGN KEY (Batch_ID) REFERENCES Batch(Batch_ID),
+    FOREIGN KEY (Facility_ID) REFERENCES Facility(Facility_ID),
+    FOREIGN KEY (Processing_Stage_ID) REFERENCES Processing_Stage(Processing_stage_ID)
+);
+
+14. Processing_Stage Table
+
+CREATE TABLE Processing_Stage (
+    Processing_stage_ID INT PRIMARY KEY,
+    Processing_stage_name VARCHAR(255)
+);
+
+15. Inventory Table
+
+CREATE TABLE Inventory (
+    Batch_ID INT,
+    Facility_ID INT,
+    Total_quantity INT,
+    Available_quantity INT,
+    PRIMARY KEY (Batch_ID, Facility_ID),
+    FOREIGN KEY (Batch_ID) REFERENCES Batch(Batch_ID),
+    FOREIGN KEY (Facility_ID) REFERENCES Facility(Facility_ID)
+);
+
+16. Transaction Table
+
+CREATE TABLE Transaction (
+    Transaction_ID INT PRIMARY KEY,
+    Batch_ID INT,
+    Facility_ID INT,
+    Manufacturer_ID INT,
+    Quantity_purchased INT,
+    Purchase_date DATE,
+    FOREIGN KEY (Batch_ID) REFERENCES Batch(Batch_ID),
+    FOREIGN KEY (Facility_ID) REFERENCES Facility(Facility_ID),
+    FOREIGN KEY (Manufacturer_ID) REFERENCES Manufacturer(Manufacturer_ID)
+);
+
+17. Manufacturer_Batch Table
+
+CREATE TABLE Manufacturer_Batch (
+    Manufacturer_ID INT,
+    Batch_ID INT,
+    Quantity_owned INT,
+    PRIMARY KEY (Manufacturer_ID, Batch_ID),
+    FOREIGN KEY (Manufacturer_ID) REFERENCES Manufacturer(Manufacturer_ID),
+    FOREIGN KEY (Batch_ID) REFERENCES Batch(Batch_ID)
+);
+
+18. Manufacturer Table
+
+CREATE TABLE Manufacturer (
+    Manufacturer_ID INT PRIMARY KEY,
+    Address_ID INT,
+    Sales_ID INT,
+    Name VARCHAR(255),
+    Wood_purchased INT,
+    FOREIGN KEY (Address_ID) REFERENCES Manufacturer_Address(Manufacturer_Address_ID),
+    FOREIGN KEY (Sales_ID) REFERENCES Sales(Sales_ID)
+);
+
+
+19. Wood_Product Table
+
+CREATE TABLE Wood_Product (
+    Product_ID INT PRIMARY KEY,
+    Manufacturer_ID INT,
+    User_ID INT,
+    Product_Type VARCHAR(255),
+    Wood_used_quantity INT,
+    Volume DECIMAL(10, 2),
+    Production_date DATE,
+    Usage_Status VARCHAR(255),
+    FOREIGN KEY (Manufacturer_ID) REFERENCES Manufacturer(Manufacturer_ID),
+    FOREIGN KEY (User_ID) REFERENCES User(User_ID)
+);
+
+20. Product_Inventory Table
+
+CREATE TABLE Product_Inventory (
+    Product_ID INT,
+    Manufacturer_ID INT,
+    Total_quantity INT,
+    Available_quantity INT,
+    PRIMARY KEY (Product_ID, Manufacturer_ID),
+    FOREIGN KEY (Product_ID) REFERENCES Wood_Product(Product_ID),
+    FOREIGN KEY (Manufacturer_ID) REFERENCES Manufacturer(Manufacturer_ID)
+);
+
+21. User Table
+
+CREATE TABLE User (
+    User_ID INT PRIMARY KEY,
+    Customer_name VARCHAR(255)
+);
+
+22. User_Contact Table
+
+CREATE TABLE User_Contact (
+    User_ID INT,
+    Contact_number VARCHAR(15),
+    PRIMARY KEY (User_ID, Contact_number),
+    FOREIGN KEY (User_ID) REFERENCES User(User_ID)
+);
+
+23. Sales Table
+
+CREATE TABLE Sales (
+    Sales_ID INT PRIMARY KEY,
+    User_ID INT,
+    Product_ID INT,
+    Purchase_date DATE,
+    Quantity_purchased INT,
+    FOREIGN KEY (User_ID) REFERENCES User(User_ID),
+    FOREIGN KEY (Product_ID) REFERENCES Wood_Product(Product_ID)
+);
+
+24. Wood_Inspection Table
+
+CREATE TABLE Wood_Inspection (
+    Product_ID INT,
+    Condition VARCHAR(255),
+    Decision VARCHAR(255),
+    PRIMARY KEY (Product_ID),
+    FOREIGN KEY (Product_ID) REFERENCES Wood_Product(Product_ID)
+);
+
+
+
+
+
+
+
+25. Waste_Disposal Table
+
+CREATE TABLE Waste_Disposal (
+    Disposal_ID INT PRIMARY KEY,
+    Product_ID INT,
+    Disposal_Method_ID INT,
+    Disposal_Date DATE,
+    FOREIGN KEY (Product_ID) REFERENCES Wood_Product(Product_ID),
+    FOREIGN KEY (Disposal_Method_ID) REFERENCES Disposal_Method(Disposal_Method_ID)
+);
+
+26. Disposal_Method Table
+
+CREATE TABLE Disposal_Method (
+    Disposal_Method_ID INT PRIMARY KEY,
+    Disposal_Method_Name VARCHAR(255)
+);
+
+27. Recycle_Method Table
+
+CREATE TABLE Recycle_Method (
+    Recycle_Method_ID INT PRIMARY KEY,
+    Recycle_Method_Name VARCHAR(255)
+);
+
+28. Recycle Table
+
+CREATE TABLE Recycle (
+    Recycle_ID INT PRIMARY KEY,
+    Product_ID INT,
+    Recycle_Method_ID INT,
+    Recycle_Date DATE,
+    FOREIGN KEY (Product_ID) REFERENCES Wood_Product(Product_ID),
+    FOREIGN KEY (Recycle_Method_ID) REFERENCES Recycle_Method(Recycle_Method_ID)
+);
+
+29. Facility_Address Table
+
+CREATE TABLE Facility_Address (
+    Facility_Address_ID INT PRIMARY KEY,
+    Street VARCHAR(255),
+    City VARCHAR(255),
+    State VARCHAR(255),
+    Postal_code VARCHAR(10)
+);
+
+30. Manufacturer_Phone Table
+
+CREATE TABLE Manufacturer_Phone (
+    Manufacturer_ID INT,
+    Contact_number VARCHAR(15),
+    PRIMARY KEY (Manufacturer_ID, Contact_number),
+    FOREIGN KEY (Manufacturer_ID) REFERENCES Manufacturer(Manufacturer_ID)
+);
+
+31. Manufacturer_Address Table
+
+CREATE TABLE Manufacturer_Address (
+    Manufacturer_Address_ID INT PRIMARY KEY,
+    Street VARCHAR(255),
+    City VARCHAR(255),
+    State VARCHAR(255),
+    Postal_code VARCHAR(10)
+);
 
